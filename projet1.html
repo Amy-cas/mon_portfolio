@@ -26,41 +26,48 @@
   <!-- ===== CONTENU DU PROJET ===== -->
   <main class="project-details">
     <div class="container">
-      <a href="index.html#projets" class="back-btn">
-        <i class="fas fa-arrow-left"></i> Retour aux projets
-      </a>
-      
-      <h1>Flyer événement religieux</h1>
-      
-      <!-- Carrousel principal -->
-      <div class="carousel">
-        <div class="main-image">
-          <img src="images/flyer1.jpg" alt="Flyer événement religieux" id="main-img">
-        </div>
-        <div class="carousel-controls">
-          <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
-          <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
-        </div>
+    <a href="index.html#projets" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Retour aux projets
+    </a>
+    
+    <h1>Flyer événement religieux</h1>
+    
+    <!-- Carrousel principal -->
+    <div class="carousel">
+      <div class="main-media">
+        <!-- L'élément média (image ou vidéo) sera inséré ici par JavaScript -->
+      </div>
+      <div class="carousel-controls">
+        <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
+        <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+    
+    <!-- Aperçu des médias (images + vidéos) -->
+    <div class="thumbnails">
+      <!-- Images -->
+      <div class="thumbnail active" data-type="image" data-src="images/flyer1.jpg">
+        <img src="images/flyer1.jpg" alt="Vue 1">
+        <div class="media-type">IMG</div>
+      </div>
+      <div class="thumbnail" data-type="image" data-src="images/flyer1-detail1.jpg">
+        <img src="images/flyer1-detail1.jpg" alt="Vue 2">
+        <div class="media-type">IMG</div>
+      </div>
+      <div class="thumbnail" data-type="image" data-src="images/flyer1-detail2.jpg">
+        <img src="images/flyer1-detail2.jpg" alt="Vue 3">
+        <div class="media-type">IMG</div>
+      </div>
+      <div class="thumbnail" data-type="image" data-src="images/flyer1-detail3.jpg">
+        <img src="images/flyer1-detail3.jpg" alt="Vue 4">
+        <div class="media-type">IMG</div>
+      </div>
+      <div class="thumbnail" data-type="image" data-src="images/flyer1-detail4.jpg">
+        <img src="images/flyer1-detail4.jpg" alt="Vue 5">
+        <div class="media-type">IMG</div>
       </div>
       
-      <!-- Aperçu des images -->
-      <div class="thumbnails">
-        <div class="thumbnail active" data-image="images/flyer1.jpg">
-          <img src="images/flyer1.jpg" alt="Vue 1">
-        </div>
-        <div class="thumbnail" data-image="images/flyer1-detail1.jpg">
-          <img src="images/flyer1-detail1.jpg" alt="Vue 2">
-        </div>
-        <div class="thumbnail" data-image="images/flyer1-detail2.jpg">
-          <img src="images/flyer1-detail2.jpg" alt="Vue 3">
-        </div>
-        <div class="thumbnail" data-image="images/flyer1-detail3.jpg">
-          <img src="images/flyer1-detail3.jpg" alt="Vue 4">
-        </div>
-        <div class="thumbnail" data-image="images/flyer1-detail4.jpg">
-          <img src="images/flyer1-detail4.jpg" alt="Vue 5">
-        </div>
-      </div>
+    </div>
       
       <!-- Description du projet -->
       <div class="project-description">

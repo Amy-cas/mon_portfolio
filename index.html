@@ -84,9 +84,10 @@
   </section>
 
   <!-- ===== PROJETS ===== -->
-  <section id="projets" class="projects">
-    <h2>Mes Projets</h2>
-    <div class="project-cards">
+<section id="projets" class="projects">
+  <h2>Mes Projets</h2>
+  <div class="carousel-container">
+    <div class="carousel-track">
       <div class="card">
         <img src="images/flyer1.jpg" alt="Flyer événement religieux">
         <h3>Flyer événement religieux</h3>
@@ -101,12 +102,30 @@
       </div>
       <div class="card">
         <img src="images/prototype.png" alt="Prototype app web">
-        <h3>Prototype d’une Application Web</h3>
-        <p>Conception d’une maquette et prototype de l’application DEKKWAY.</p>
+        <h3>Prototype d'une Application Web</h3>
+        <p>Conception d'une maquette et prototype de l'application DEKKWAY.</p>
         <a href="projet3.html" class="btn">Voir plus</a>
       </div>
+      <div class="card">
+        <img src="images/img1.jpg" alt="Image1">
+        <h3>Community management pour une boutique</h3>
+        <p>Création de contenus pour la boutique Diop & Frères.</p>
+        <a href="projet4.html" class="btn">Voir plus</a>
+      </div>
     </div>
-  </section>
+    
+    <!-- Contrôles du carrousel -->
+    <button class="carousel-btn prev-btn" aria-label="Projet précédent">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="carousel-btn next-btn" aria-label="Projet suivant">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    
+    <!-- Indicateurs de position -->
+    <div class="carousel-indicators"></div>
+  </div>
+</section>
 
   <!-- ===== COMPÉTENCES ===== -->
   <section id="competences" class="skills">

@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     videoContainer.className = 'video-container';
     
     const video = document.createElement('video');
+    video.preload = 'metadata';
     video.src = src;
     video.controls = false; // Désactiver les contrôles natifs
     video.style.width = '100%';
@@ -77,6 +78,13 @@ document.addEventListener('DOMContentLoaded', function() {
     video.style.height = 'auto';
     video.style.maxHeight = '70vh';
     video.style.objectFit = 'contain';
+
+
+    video.addEventListener('play', function() {
+    if (video.src === src) {
+      video.preload = 'auto';
+    }
+  });
     
     // Contrôles personnalisés
     const controls = document.createElement('div');

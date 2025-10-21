@@ -68,21 +68,17 @@ document.addEventListener('DOMContentLoaded', function() {
   function createVideoElement(src) {
     const videoContainer = document.createElement('div');
     videoContainer.className = 'video-container';
-    videoContainer.style.position = 'relative';
-    videoContainer.style.width = '100%';
-    videoContainer.style.height = '100%';
-    videoContainer.style.display = 'flex';
-    videoContainer.style.alignItems = 'center';
-    videoContainer.style.justifyContent = 'center';
     
     const video = document.createElement('video');
     video.src = src;
-    video.controls = true;
+    video.controls = false; // Désactiver les contrôles natifs
     video.style.width = '100%';
+    video.style.maxWidth = '100%';
+    video.style.height = 'auto';
     video.style.maxHeight = '70vh';
     video.style.objectFit = 'contain';
     
-    // Contrôles personnalisés supplémentaires
+    // Contrôles personnalisés
     const controls = document.createElement('div');
     controls.className = 'video-controls';
     controls.innerHTML = `
@@ -102,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const muteBtn = controls.querySelector('.mute');
     const fullscreenBtn = controls.querySelector('.fullscreen');
     
+    // Lecture/Pause
     playPauseBtn.addEventListener('click', () => {
       if (video.paused) {
         video.play();
@@ -112,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
+    // Muet
     muteBtn.addEventListener('click', () => {
       video.muted = !video.muted;
       muteBtn.innerHTML = video.muted ? 
@@ -119,13 +117,24 @@ document.addEventListener('DOMContentLoaded', function() {
         '<i class="fas fa-volume-up"></i>';
     });
     
+    // Plein écran
     fullscreenBtn.addEventListener('click', () => {
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
+      if (!document.fullscreenElement) {
+        if (videoContainer.requestFullscreen) {
+          videoContainer.requestFullscreen();
+        } else if (videoContainer.webkitRequestFullscreen) {
+          videoContainer.webkitRequestFullscreen();
+        } else if (videoContainer.msRequestFullscreen) {
+          videoContainer.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
       }
     });
     
@@ -138,11 +147,54 @@ document.addEventListener('DOMContentLoaded', function() {
       playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
     
-    // Sortie du mode plein écran
-    video.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement) {
-        // Réinitialiser les styles si nécessaire
+    // Gérer la fin de la vidéo
+    video.addEventListener('ended', () => {
+      playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    });
+    
+    // Gérer le changement de mode plein écran
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('msfullscreenchange', handleFullscreenChange);
+    
+    function handleFullscreenChange() {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+      } else {
+        fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
       }
+    }
+    
+    // Cacher les contrôles quand la souris n'est pas sur la vidéo
+    let controlsTimeout;
+    videoContainer.addEventListener('mousemove', () => {
+      controls.style.opacity = '1';
+      clearTimeout(controlsTimeout);
+      controlsTimeout = setTimeout(() => {
+        if (!video.paused) {
+          controls.style.opacity = '0';
+        }
+      }, 3000);
+    });
+    
+    videoContainer.addEventListener('mouseleave', () => {
+      if (!video.paused) {
+        controlsTimeout = setTimeout(() => {
+          controls.style.opacity = '0';
+        }, 1000);
+      }
+    });
+    
+    // Toujours montrer les contrôles quand la vidéo est en pause
+    video.addEventListener('play', () => {
+      controlsTimeout = setTimeout(() => {
+        controls.style.opacity = '0';
+      }, 3000);
+    });
+    
+    video.addEventListener('pause', () => {
+      controls.style.opacity = '1';
+      clearTimeout(controlsTimeout);
     });
     
     videoContainer.appendChild(video);
@@ -150,6 +202,34 @@ document.addEventListener('DOMContentLoaded', function() {
     mainMedia.appendChild(videoContainer);
     
     currentVideo = video;
+    
+    // Ajuster la hauteur de la vidéo après le chargement
+    video.addEventListener('loadedmetadata', function() {
+      adjustVideoSize(video);
+    });
+    
+    video.addEventListener('resize', function() {
+      adjustVideoSize(video);
+    });
+  }
+  
+  // Ajuster la taille de la vidéo pour qu'elle s'adapte correctement
+  function adjustVideoSize(video) {
+    const container = mainMedia;
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    
+    const videoWidth = video.videoWidth;
+    const videoHeight = video.videoHeight;
+    
+    const widthRatio = containerWidth / videoWidth;
+    const heightRatio = containerHeight / videoHeight;
+    
+    // Utiliser le ratio le plus petit pour que la vidéo tienne entièrement
+    const scale = Math.min(widthRatio, heightRatio);
+    
+    video.style.width = (videoWidth * scale) + 'px';
+    video.style.height = (videoHeight * scale) + 'px';
   }
   
   // Arrêter la vidéo en cours
@@ -184,6 +264,14 @@ document.addEventListener('DOMContentLoaded', function() {
       changeMedia(currentIndex);
     } else if (e.key === 'Escape') {
       stopCurrentVideo();
+    } else if (e.key === ' ' && currentVideo) {
+      // Espace pour play/pause la vidéo
+      e.preventDefault();
+      if (currentVideo.paused) {
+        currentVideo.play();
+      } else {
+        currentVideo.pause();
+      }
     }
   });
   
@@ -197,6 +285,13 @@ document.addEventListener('DOMContentLoaded', function() {
       toggleThemeBtn.textContent = body.classList.contains('light-mode') ? '🌞' : '🌙';
     });
   }
+  
+  // Redimensionnement de la fenêtre
+  window.addEventListener('resize', () => {
+    if (currentVideo) {
+      adjustVideoSize(currentVideo);
+    }
+  });
   
   // Initialisation - charger le premier média
   changeMedia(0);
